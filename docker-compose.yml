@@ -1,0 +1,73 @@
+version: "3.9"
+
+services:
+  medical:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./logging.log:/medicalplaza/logging.log
+      - ./python_app:/medicalplaza/python_app   
+    ports:
+      - "5050:8000"   
+    restart: always
+    networks:
+      - backend
+
+  redis:
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 60 1 --loglevel warning
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  db:
+    image: postgres:16.4
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - backend
+  
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./python_app/Backend/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./python_app/Backend/ssl_jwtkey_aes/ssl:/etc/nginx/ssl:ro
+      - ./python_app/Frontend:/usr/share/nginx/Frontend:ro
+      - ./python_app/Frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - medical
+    restart: always
+    networks:
+      - backend
+
+
+volumes:
+  redis_data:
+  pgdata:
+
+networks:
+  backend:

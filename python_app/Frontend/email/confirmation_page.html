@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: {{ color }};
+        }
+        .message {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: {{ color }};
+        }
+        .note {
+            font-size: 15px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ title }}</h2>
+        <p class="message">{{ message }}</p>
+        {% if not success %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

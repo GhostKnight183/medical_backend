@@ -1,0 +1,9 @@
+**/.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.vscode/
+.idea/
+.env
+python_app/Backend/ssl_jwtkey_aes/
