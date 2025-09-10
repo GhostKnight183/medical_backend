@@ -74,7 +74,7 @@ class UsersAuth(Base):
     is_banned : Mapped[bool] = mapped_column(default=False)
 
     __table_args__ = (
-        Index("email_index","email")
+        Index("email_index","email"),
     )
 
 class Patients(Base):
@@ -88,7 +88,7 @@ class Patients(Base):
     doctor_id : Mapped[int] = mapped_column(ForeignKey("doctors.id",ondelete="CASCADE"), nullable=True)
 
     __table_args__ = (
-        Index("email_doctor_index","email","doctor_id")
+        Index("email_doctor_index","email","doctor_id"),
     )
 
     doctors = relationship("Doctors",back_populates="patients")
@@ -111,7 +111,7 @@ class Doctors(Base):
     total_visits : Mapped[int] = mapped_column(nullable=True)
 
     __table_args__ = (
-        Index("email_specialty_index","email","specialty")
+        Index("email_specialty_index","email","specialty"),
     )
 
     patients = relationship("Patients",back_populates="doctors")
@@ -130,7 +130,7 @@ class Admins(Base):
     role : Mapped[UsersRole] = mapped_column(SQLEnum(UsersRole),default= UsersRole.Admins)
 
     __table_args__ = (
-        Index("email_index","email")
+        Index("email_index","email"),
     )
 
     locations = relationship("Locations",back_populates="admins")
@@ -158,7 +158,7 @@ class Grades(Base):
     created_at: Mapped[datetime.datetime] = mapped_column(default = datetime.datetime.utcnow())
 
     __table_args__ = (
-        Index("doctor_index","doctor_id")
+        Index("doctor_index","doctor_id"),
     )
 
     patients = relationship("Patients",back_populates="grades")
